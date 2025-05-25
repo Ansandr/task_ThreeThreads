@@ -1,6 +1,5 @@
-# Develop C++ QT Window Application
-
-Develop C++ QT window application, with multiple threads that communicate with each other.
+# C++ QT Window Application
+C++ QT window application, with multiple threads that communicate with each other.
 
 There are three threads:
 
