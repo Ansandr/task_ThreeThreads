@@ -10,6 +10,8 @@ public:
     explicit Generator(QObject *parent = nullptr);
     ~Generator();
 
+    int getValue();
+
 public slots:
     void start();
     void stop();

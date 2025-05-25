@@ -13,8 +13,8 @@ public:
 
     void enqueue(int number);
     int dequeue();
-    bool isEmpty();
-    int size();
+
+    QList<int> getAllItems();
 
 signals:
     void queueUpdated(QList<int> currentItems); // qqueue can't be transferred through signal

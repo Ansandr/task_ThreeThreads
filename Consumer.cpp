@@ -10,6 +10,11 @@ Consumer::Consumer(QObject *parent)
 Consumer::~Consumer()
 {}
 
+int Consumer::getValue()
+{
+    return value;
+}
+
 void Consumer::start()
 {
     if (isRunning) return;

@@ -35,16 +35,8 @@ int SharedQueue::dequeue()
     return num;
 }
 
-bool SharedQueue::isEmpty()
+QList<int> SharedQueue::getAllItems()
 {
     QMutexLocker locker(&mutex);
-    return queue.isEmpty();
+    return queue.toList();
 }
-
-int SharedQueue::size()
-{
-    QMutexLocker locker(&mutex);
-    return queue.size();
-}
-
-

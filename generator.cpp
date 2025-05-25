@@ -13,6 +13,13 @@ Generator::Generator(QObject *parent)
 Generator::~Generator()
 {}
 
+int Generator::getValue()
+{
+    return value;
+}
+
+
+
 void Generator::start()
 {
     if (isRunning) return;

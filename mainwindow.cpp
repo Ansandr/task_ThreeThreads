@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     queue = new SharedQueue();
     queue->moveToThread(qThread);
 
-    // cosumer
+    // consumer
     cThread = new QThread();
     cThread->setObjectName("Consumer thread");
 
@@ -34,14 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QObject::connect(cThread, &QThread::started, consumer, &Consumer::start);
 
-
     // GENERATOR connections
-    // Update list widget
-    connect(generator, &Generator::produced, this, [this](int val) {
-        ui->listGenerator->clear();
-        ui->listGenerator->addItem(QString::number(val));
-    });
-
     // Update label when status change
     connect(generator, &Generator::started, this, [=]() {
         ui->label_status_generator->setText("Running");
@@ -52,21 +45,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // QUEUE connections
     connect(generator, &Generator::produced, queue, &SharedQueue::enqueue);
-    connect(queue, &SharedQueue::queueUpdated, this, [=](const QList<int>& items) {
-        ui->listQueue->clear();
-        for (int val : items)
-            ui->listQueue->addItem(QString::number(val));
-    });
 
     // CONSUMER connections
     // coonect queue with consumer
     connect(queue, &SharedQueue::dequeued, consumer, &Consumer::consume);
-
-    // Update list widget
-    connect(consumer, &Consumer::consumed, this, [this](int val) {
-        ui->listConsumer->clear();
-        ui->listConsumer->addItem(QString::number(val));
-    });
 
     // Update label when status change
     connect(consumer, &Consumer::started, this, [=]() {
@@ -82,11 +64,32 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btnStartConsumer, &QPushButton::clicked, consumer, &Consumer::start);
     connect(ui->btnStopConsumer, &QPushButton::clicked, consumer, &Consumer::stop);
 
+    // Timer for updating GUI
+    QTimer* updateTimer = new QTimer(this);
+
+    updateTimer->start(333); // Update list widgets 3 times per second
+    connect(updateTimer, &QTimer::timeout, this, [=]() {
+        int val = generator->getValue();
+        ui->listGenerator->clear();
+        ui->listGenerator->addItem(QString::number(val));
+    });
+    connect(updateTimer, &QTimer::timeout, this, [=]() {
+        QList<int> items = queue->getAllItems();
+        ui->listQueue->clear();
+
+        for (int val : items)
+            ui->listQueue->addItem(QString::number(val));
+    });
+    connect(updateTimer, &QTimer::timeout, this, [=]() {
+        int val = consumer->getValue();
+        ui->listConsumer->clear();
+        ui->listConsumer->addItem(QString::number(val));
+    });
+
     // starting all threads
     gThread->start();
     qThread->start();
     cThread->start();
-
 }
 
 MainWindow::~MainWindow()

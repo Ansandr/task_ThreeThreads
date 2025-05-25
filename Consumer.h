@@ -10,6 +10,8 @@ public:
     explicit Consumer(QObject *parent = nullptr);
     ~Consumer();
 
+    int getValue();
+
 public slots:
     void start();
     void stop();
