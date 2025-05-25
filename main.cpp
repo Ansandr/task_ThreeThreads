@@ -1,9 +1,6 @@
-#include "Generator.h"
 #include "mainwindow.h"
 
 #include <QApplication>
-#include <QThread>
-#include <QObject>
 
 int main(int argc, char *argv[])
 {

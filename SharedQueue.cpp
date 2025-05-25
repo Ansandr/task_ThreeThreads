@@ -40,3 +40,15 @@ QList<int> SharedQueue::getAllItems()
     QMutexLocker locker(&mutex);
     return queue.toList();
 }
+
+bool SharedQueue::isEmpty()
+{
+    QMutexLocker locker(&mutex);
+    return queue.isEmpty();
+}
+
+int SharedQueue::size()
+{
+    QMutexLocker locker(&mutex);
+    return queue.size();
+}

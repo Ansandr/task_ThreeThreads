@@ -1,13 +1,16 @@
 #pragma once
 
+#include "SharedQueue.h"
+
 #include <QObject>
 #include <QThread>
+#include <QTimer>
 
 class Consumer : public QObject
 {
     Q_OBJECT
 public:
-    explicit Consumer(QObject *parent = nullptr);
+    explicit Consumer(SharedQueue* queue, QObject *parent = nullptr);
     ~Consumer();
 
     int getValue();
@@ -15,6 +18,7 @@ public:
 public slots:
     void start();
     void stop();
+
 
     void consume(int value);
 
@@ -25,6 +29,10 @@ signals:
     void stopped();
 
 private:
+    void work();
+
     int value;
+    QTimer *timer;
+    SharedQueue* queue = nullptr; // Queue refrence
     bool isRunning;
 };

@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     cThread = new QThread();
     cThread->setObjectName("Consumer thread");
 
-    consumer = new Consumer();
+    consumer = new Consumer(queue);
     consumer->moveToThread(cThread);
 
     QObject::connect(cThread, &QThread::started, consumer, &Consumer::start);
@@ -47,8 +47,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(generator, &Generator::produced, queue, &SharedQueue::enqueue);
 
     // CONSUMER connections
-    // coonect queue with consumer
-    connect(queue, &SharedQueue::dequeued, consumer, &Consumer::consume);
 
     // Update label when status change
     connect(consumer, &Consumer::started, this, [=]() {

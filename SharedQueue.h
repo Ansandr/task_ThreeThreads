@@ -16,11 +16,13 @@ public:
 
     QList<int> getAllItems();
 
+    bool isEmpty();
+    int size();
+
 signals:
     void queueUpdated(QList<int> currentItems); // qqueue can't be transferred through signal
     void enqueued(int number);
     void dequeued(int number);
-
 private:
     QQueue<int> queue;
     QMutex mutex;
