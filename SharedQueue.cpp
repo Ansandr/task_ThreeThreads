@@ -17,7 +17,7 @@ void SharedQueue::enqueue(int number)
     queue.enqueue(number);
     emit queueUpdated(queue.toList());
     emit enqueued(number);
-    notEmpty.wakeOne(); // Разбудить consumer
+    notEmpty.wakeOne(); // Wake consumer
 }
 
  // Removes the head item in the queue and returns it.
@@ -26,7 +26,7 @@ int SharedQueue::dequeue()
     QMutexLocker locker(&mutex);
 
     while (queue.isEmpty()) {
-        notEmpty.wait(&mutex); // ждать пока появиться элемент
+        notEmpty.wait(&mutex); // wait until the element appears
     }
 
     int num = queue.dequeue();
